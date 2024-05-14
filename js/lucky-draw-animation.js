@@ -37,101 +37,96 @@ if (users.length > maxCount) {
 }
 
 // 属性
-var camera, scene, renderer
+var camera, scene, renderer, cssRenderer
+
+var clock = new THREE.Clock(true); // 初始化时钟，true参数表示立即开始计时
+var isinit = false
 
 // 名片3D坐标
 var objects = []
 var targets = { sphere: [], grid: [] }
 
 // 动画类型
-var animateTypes = ['sphere', 'grid', 'none']
+var animateTypes = ['sphere', 'grid', 'none', 'rotate']
 var animateType = undefined
-var animateDuration = 2000
+var animateDuration = 3000
 
-// 初始化
 init()
 animate()
 
 // 初始化
 function init() {
+	var clock = new THREE.Clock(); // 时钟对象，用于计算时间间隔
+	clock.start(); // 启动时钟
 
 	// 摄像机
 	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000)
-	camera.position.z = 3000
+	camera.position.z = 3000;
 
 	// 场景
-	scene = new THREE.Scene()
+	scene = new THREE.Scene();
 
-	// sphere || none
-	var vector = new THREE.Vector3()
-	for (var i = 0, l = userPros.length; i < l; i++) {
+	// 准备3D模型的材质和几何体
+	var geometry = new THREE.BoxGeometry(130, 220, 5);  // 盒子模型，代表扑克牌
+	// var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });  // 绿色材质
 
-		// 用户
-		const user = userPros[i]
+	// 加载贴图
+	var textureLoader = new THREE.TextureLoader();
+	textureLoader.load('../fig/back.png', function (texture) {
+		var material = new THREE.MeshBasicMaterial({ map: texture });  // 使用贴图创建材质
 
-		// 名片
-		var element = document.createElement('div')
-		element.className = 'element'
-		// 名片背景颜色（为了效果，给了个随机透明度）
-		element.style.backgroundColor = `rgba(0, 127, 127, ${Math.random() * 0.5 + 0.25})`
+		var vector = new THREE.Vector3();
 
-		// var number = document.createElement( 'div' )
-		// number.className = 'number'
-		// number.textContent = user.id
-		// element.appendChild( number )
+		console.log(userPros);
 
-		// 名称
-		var symbol = document.createElement('div')
-		symbol.className = 'symbol'
-		symbol.textContent = user.name
-		element.appendChild(symbol)
+		for (var i = 0, l = userPros.length; i < l; i++) {
+			// 创建Mesh对象
+			var mesh = new THREE.Mesh(geometry, material);
+			mesh.position.x = Math.random() * 4000 - 2000;
+			mesh.position.y = Math.random() * 4000 - 2000;
+			mesh.position.z = Math.random() * 4000 - 2000;
+			scene.add(mesh);
+			objects.push(mesh);
 
-		// 描述
-		var details = document.createElement('div')
-		details.className = 'details'
-		details.textContent = user.department
-		element.appendChild(details)
+			// sphere
+			var phi = i * 0.175 + Math.PI;
+			var object = new THREE.Object3D();
+			object.position.x = 900 * Math.sin(phi);
+			object.position.y = - (i * 8) + 900;
+			object.position.z = 900 * Math.cos(phi);
+			vector.x = object.position.x * 2;
+			vector.y = object.position.y;
+			vector.z = object.position.z * 2;
+			object.lookAt(vector);
+			targets.sphere.push(object);
+		}
+	});
 
-		// none
-		var object = new THREE.CSS3DObject(element)
-		object.position.x = Math.random() * 4000 - 2000
-		object.position.y = Math.random() * 4000 - 2000
-		object.position.z = Math.random() * 4000 - 2000
-		scene.add(object)
-		objects.push(object)
-
-		// sphere
-		var phi = Math.acos(-1 + (2 * i) / l)
-		var theta = Math.sqrt(l * Math.PI) * phi
-		var object = new THREE.Object3D()
-		object.position.x = 800 * Math.cos(theta) * Math.sin(phi)
-		object.position.y = 800 * Math.sin(theta) * Math.sin(phi)
-		object.position.z = 800 * Math.cos(phi)
-		vector.copy(object.position).multiplyScalar(2)
-		object.lookAt(vector)
-		targets.sphere.push(object)
-	}
+	console.log(targets)
 
 	// grid
 	for (var i = 0; i < objects.length; i++) {
-		var object = new THREE.Object3D()
-		object.position.x = ((i % 10) * 400) - 1800
-		object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800
-		object.position.z = (Math.floor(i / 25)) * 1000 - perspective
-		targets.grid.push(object)
+		var object = new THREE.Object3D();
+		object.position.x = ((i % 10) * 400) - 1800;
+		object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800;
+		object.position.z = (Math.floor(i / 25)) * 1000 - perspective;
+		targets.grid.push(object);
 	}
 
 	// 父容器
-	renderer = new THREE.CSS3DRenderer()
-	renderer.setSize(window.innerWidth, window.innerHeight)
-	renderer.domElement.style.position = 'absolute'
-	document.getElementById('container').appendChild(renderer.domElement)
+	renderer = new THREE.WebGLRenderer();
+	// renderer = new THREE.WebGLRenderer();  // 使用WebGLRenderer代替CSS3DRenderer
+	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.domElement.style.position = 'absolute';
+	document.getElementById('container').appendChild(renderer.domElement);
 
+
+	// 初始化完成
+	isinit = true
 	// 开始
-	onlyAnimate()
-
+	onlyAnimate();
 	// 监听浏览器尺寸
-	window.addEventListener('resize', onWindowResize, false)
+	window.addEventListener('resize', onWindowResize, false);
 }
 
 // 刷新坐标
@@ -177,8 +172,14 @@ function onWindowResize() {
 
 // 动画
 function animate() {
-	requestAnimationFrame(animate)
-	TWEEN.update()
+	requestAnimationFrame(animate);
+	// update(); // 更新物体状态
+	console.log('animateType', animateType)
+	if (isinit) {
+		update();
+	}
+	TWEEN.update();
+	renderer.render(scene, camera); // 确保添加渲染调用
 }
 
 // 重新绘制
@@ -190,8 +191,9 @@ function render() {
 function onlyAnimate() {
 	setAnimate('grid')
 	setTimeout(() => {
-		setAnimate('sphere')
-	}, 4000)
+		setAnimate('sphere');
+	}, 2000)
+
 }
 
 // 停止动画
@@ -219,3 +221,100 @@ function setAnimate(type) {
 		transform(objects, animateDuration)
 	}
 }
+
+// 旋转
+function update() {
+	var elapsed = clock.getElapsedTime();
+
+	for (var i = 0; i < objects.length; i++) {
+		var object = objects[i];
+		var angle = elapsed + i * 0.175 + Math.PI
+		// object.rotation.y = angle;
+		object.position.y = - (i * 8) + 900;
+		object.position.x = 900 * Math.sin(angle);
+		object.position.z = 900 * Math.cos(angle);
+	}
+}
+
+
+// // 初始化
+// function init() {
+
+// 	// 摄像机
+// 	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000)
+// 	camera.position.z = 3000
+
+// 	// 场景
+// 	scene = new THREE.Scene()
+
+// 	// sphere || none
+// 	var vector = new THREE.Vector3()
+// 	for (var i = 0, l = userPros.length; i < l; i++) {
+
+// 		// 用户
+// 		const user = userPros[i]
+
+// 		// 名片
+// 		var element = document.createElement('div')
+// 		element.className = 'element'
+// 		// 名片背景颜色（为了效果，给了个随机透明度）
+// 		element.style.backgroundColor = `rgba(0, 127, 127, ${Math.random() * 0.5 + 0.25})`
+
+// 		// var number = document.createElement( 'div' )
+// 		// number.className = 'number'
+// 		// number.textContent = user.id
+// 		// element.appendChild( number )
+
+// 		// 名称
+// 		var symbol = document.createElement('div')
+// 		symbol.className = 'symbol'
+// 		symbol.textContent = user.name
+// 		element.appendChild(symbol)
+
+// 		// 描述
+// 		var details = document.createElement('div')
+// 		details.className = 'details'
+// 		details.textContent = user.department
+// 		element.appendChild(details)
+
+// 		// none
+// 		var object = new THREE.CSS3DObject(element)
+// 		object.position.x = Math.random() * 4000 - 2000
+// 		object.position.y = Math.random() * 4000 - 2000
+// 		object.position.z = Math.random() * 4000 - 2000
+// 		scene.add(object)
+// 		objects.push(object)
+
+// 		// sphere
+// 		var phi = Math.acos(-1 + (2 * i) / l)
+// 		var theta = Math.sqrt(l * Math.PI) * phi
+// 		var object = new THREE.Object3D()
+// 		object.position.x = 800 * Math.cos(theta) * Math.sin(phi)
+// 		object.position.y = 800 * Math.sin(theta) * Math.sin(phi)
+// 		object.position.z = 800 * Math.cos(phi)
+// 		vector.copy(object.position).multiplyScalar(2)
+// 		object.lookAt(vector)
+// 		targets.sphere.push(object)
+// 	}
+
+// 	// grid
+// 	for (var i = 0; i < objects.length; i++) {
+// 		var object = new THREE.Object3D()
+// 		object.position.x = ((i % 10) * 400) - 1800
+// 		object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800
+// 		object.position.z = (Math.floor(i / 25)) * 1000 - perspective
+// 		targets.grid.push(object)
+// 	}
+
+// 	// 父容器
+// 	renderer = new THREE.CSS3DRenderer()
+// 	renderer.setSize(window.innerWidth, window.innerHeight)
+// 	renderer.domElement.style.position = 'absolute'
+// 	document.getElementById('container').appendChild(renderer.domElement)
+
+// 	// 开始
+// 	onlyAnimate()
+
+// 	// 监听浏览器尺寸
+// 	window.addEventListener('resize', onWindowResize, false)
+// }
