@@ -62,3 +62,51 @@ body {
 	font-size: 12px;
 	color: rgba(127, 255, 255, 0.75);
 } */
+
+.card {
+    width: 250px;
+    height: 450px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.card-front {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-image: url("../fig/back.png"); /* 导入背景图片 */
+    background-size: cover; /* 背景图片自适应 */
+    background-position: center; /* 背景图片居中 */
+    color: rgba(247, 232, 173, 1);
+}
+.card-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.4);
+    background-image: url("../fig/front.png"); /* 导入背景图片 */
+    background-size: cover; /* 背景图片自适应 */
+    background-position: center; /* 背景图片居中 */
+
+    width: 100%;
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+}
+.card-back div {
+    color: rgba(247, 232, 173, 1);
+}
+.card-back {
+    transform: rotateY(180deg);
+}

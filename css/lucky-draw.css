@@ -48,6 +48,7 @@ body {
     color: rgba(255, 255, 255, 0.75);
     /* 按钮字体阴影 */
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    z-index: 10;
 }
 /* 抽奖浮层 - 奖项 */
 .ant-select-dropdown {
@@ -119,10 +120,26 @@ body {
     overflow-x: auto;
     margin: 10px; /* 设置外边距 */
 }
+.card {
+    width: 100px;
+    height: 150px;
+    perspective: 1000px;
+}
+.lucky-draw-user,
+.card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
+.card-back {
+    transform: rotateY(180deg);
+}
+
 /* 抽奖浮层 - 开始抽奖从中间撑开 */
 .lucky-draw-users-start {
     opacity: 1;
-    height: 260px;
+    height: calc(100vh - 20px);
 }
 /* 隐藏滚动条 */
 .hide-scrollbar {
@@ -191,7 +208,7 @@ body {
     word-wrap: break-word;
     /* 用户名颜色 */
     /* color: rgba(255, 255, 255, 0.75); */
-    color: #fff;
+    color: rgba(247, 232, 173, 1);
     /* 用户名阴影 */
     text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }
@@ -201,7 +218,7 @@ body {
     bottom: 14px;
     /* 职位颜色 */
     /* color: rgba(255, 255, 255, 0.75); */
-    color: #fff;
+    color: rgba(247, 232, 173, 1);
     /* 职位阴影 */
     text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }

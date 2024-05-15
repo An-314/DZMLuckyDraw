@@ -72,13 +72,8 @@ new Vue({
       <!-- 抽奖显示页面 -->
       <div :class="isLuckyDraw ? 'lucky-draw-content lucky-draw-start' : 'lucky-draw-content'">
         <div :class="isLuckyDraw ? (isScrollbarVisible ? 'lucky-draw-users show-scrollbar lucky-draw-users-start' : 'lucky-draw-users hide-scrollbar lucky-draw-users-start') : (isScrollbarVisible ? 'lucky-draw-users show-scrollbar' : 'lucky-draw-users hide-scrollbar')">
-          <div class="lucky-draw-users-content" v-if="users.length">
-            <div class="lucky-draw-user" v-for="item in users" :key="index">
-              <div class="lucky-draw-user-name">{{ item.name }}</div>
-              <div class="lucky-draw-user-department">{{ item.department }}</div>
-            </div>
-          </div>
-          <div v-if="!users.length && !surplusUsers.length" class="lucky-draw-empty">老板大气，已经人人中奖了！</div>
+          
+
         </div>
       </div>
       <!-- 设置奖项，人数，并开始抽奖 -->
@@ -209,43 +204,10 @@ new Vue({
   },
   watch: {
     users: function (newUsers) {
-      this.createCSS3DCards(newUsers);
-    }
+      updateCSS3DCards(newUsers);
+    },
   },
   methods: {
-    createCSS3DCards(users) {
-      // 清除旧的CSS3D对象
-      while (cssObjects.length) {
-        cssScene.remove(cssObjects.pop());
-      }
-      var element, front, back;
-      for (var i = 0, l = users.length; i < l; i++) {
-        element = document.createElement('div');
-        element.className = 'card';
-        front = document.createElement('div');
-        front.className = 'lucky-draw-user';
-        front.textContent = 'Back Side'; // 背面内容
-        element.appendChild(front);
-        back = document.createElement('div');
-        back.className = 'card-back';
-        back.innerHTML = `<div>${users[i].name}</div><div>${users[i].department}</div>`; // 正面内容
-        element.appendChild(back);
-        var objectCSS = new THREE.CSS3DObject(element);
-        objectCSS.position.x = (i - users.length / 2) * 160;
-        objectCSS.position.y = 0;
-        objectCSS.position.z = 0;
-        cssScene.add(objectCSS);
-        cssObjects.push(objectCSS);
-      }
-    },
-    flipCards() {
-      for (var i = 0; i < cssObjects.length; i++) {
-        new TWEEN.Tween(cssObjects[i].rotation)
-          .to({ y: Math.PI }, 1000)
-          .easing(TWEEN.Easing.Quadratic.InOut)
-          .start();
-      }
-    },
     // 切换奖项
     handleModeTypeChange(value, e) {
       // 记录奖项
@@ -307,13 +269,15 @@ new Vue({
             generateResult(users)
           }, animateDuration)
         }
+        createCSS3DCards(this.lastUsers);
+        isCardRotating = true;
       }
     },
     // 停止抽奖
     stopLuckyDraw() {
       if (this.tempNumber === this.number) {
         isRotating = false;
-        this.flipCards()
+        flipCards()
         if (this.luckyDrawTime) {
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
@@ -321,6 +285,7 @@ new Vue({
           this.saveWinningUsers()
           stopAnimate('grid')
         } else {
+          clearCSSObjects()
           this.removeMonitorMouseScrolling()
           this.isLuckyDraw = false
           this.numberPeople = undefined
