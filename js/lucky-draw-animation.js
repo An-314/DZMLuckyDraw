@@ -62,6 +62,7 @@ function init() {
 
 	// 场景
 	scene = new THREE.Scene();
+	cssScene = new THREE.Scene();
 
 	// 准备3D模型的材质和几何体
 	var geometry = new THREE.BoxGeometry(130, 220, 5);  // 盒子模型，代表扑克牌
@@ -126,32 +127,32 @@ function init() {
 	window.addEventListener('resize', onWindowResize, false);
 }
 
-// 创建CSS3D卡片对象
-function createCSS3DCards() {
-	var element, front, back;
+// // 创建CSS3D卡片对象
+// function createCSS3DCards() {
+// 	var element, front, back;
 
-	for (var i = 0, l = userPros.length; i < l; i++) {
-		element = document.createElement('div');
-		element.className = 'card';
+// 	for (var i = 0, l = userPros.length; i < l; i++) {
+// 		element = document.createElement('div');
+// 		element.className = 'card';
 
-		front = document.createElement('div');
-		front.className = 'card-front';
-		front.textContent = 'Back Side'; // 背面内容
-		element.appendChild(front);
+// 		front = document.createElement('div');
+// 		front.className = 'card-front';
+// 		front.textContent = 'Back Side'; // 背面内容
+// 		element.appendChild(front);
 
-		back = document.createElement('div');
-		back.className = 'card-back';
-		back.innerHTML = `<div>${userPros[i].name}</div><div>${userPros[i].department}</div>`; // 正面内容
-		element.appendChild(back);
+// 		back = document.createElement('div');
+// 		back.className = 'card-back';
+// 		back.innerHTML = `<div>${userPros[i].name}</div><div>${userPros[i].department}</div>`; // 正面内容
+// 		element.appendChild(back);
 
-		var objectCSS = new THREE.CSS3DObject(element);
-		objectCSS.position.x = (i - userPros.length / 2) * 160;
-		objectCSS.position.y = 0;
-		objectCSS.position.z = 0;
-		cssScene.add(objectCSS);
-		cssObjects.push(objectCSS);
-	}
-}
+// 		var objectCSS = new THREE.CSS3DObject(element);
+// 		objectCSS.position.x = (i - userPros.length / 2) * 160;
+// 		objectCSS.position.y = 0;
+// 		objectCSS.position.z = 0;
+// 		cssScene.add(objectCSS);
+// 		cssObjects.push(objectCSS);
+// 	}
+// }
 
 // 动画函数
 function animate() {
