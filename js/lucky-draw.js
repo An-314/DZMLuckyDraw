@@ -25,7 +25,7 @@ const WinningUsersModal = {
           dataIndex: 'names',
           key: 'names'
         }
-      ]
+      ],
     }
   },
   template: `
@@ -162,7 +162,9 @@ new Vue({
       // 滚动定时器
       luckyDrawTime: undefined,
       // 鼠标滚动元素
-      mouseScrollingElement: null
+      mouseScrollingElement: null,
+      // 卡片翻转状态
+      isResult: false
     }
   },
   mounted() {
@@ -205,7 +207,45 @@ new Vue({
       })
     }
   },
+  watch: {
+    users: function (newUsers) {
+      this.createCSS3DCards(newUsers);
+    }
+  },
   methods: {
+    createCSS3DCards(users) {
+      // 清除旧的CSS3D对象
+      while (cssObjects.length) {
+        cssScene.remove(cssObjects.pop());
+      }
+      var element, front, back;
+      for (var i = 0, l = users.length; i < l; i++) {
+        element = document.createElement('div');
+        element.className = 'card';
+        front = document.createElement('div');
+        front.className = 'lucky-draw-user';
+        front.textContent = 'Back Side'; // 背面内容
+        element.appendChild(front);
+        back = document.createElement('div');
+        back.className = 'card-back';
+        back.innerHTML = `<div>${users[i].name}</div><div>${users[i].department}</div>`; // 正面内容
+        element.appendChild(back);
+        var objectCSS = new THREE.CSS3DObject(element);
+        objectCSS.position.x = (i - users.length / 2) * 160;
+        objectCSS.position.y = 0;
+        objectCSS.position.z = 0;
+        cssScene.add(objectCSS);
+        cssObjects.push(objectCSS);
+      }
+    },
+    flipCards() {
+      for (var i = 0; i < cssObjects.length; i++) {
+        new TWEEN.Tween(cssObjects[i].rotation)
+          .to({ y: Math.PI }, 1000)
+          .easing(TWEEN.Easing.Quadratic.InOut)
+          .start();
+      }
+    },
     // 切换奖项
     handleModeTypeChange(value, e) {
       // 记录奖项
@@ -247,6 +287,7 @@ new Vue({
     startLuckyDraw() {
       if (this.tempNumber != this.number) {
         this.tempNumber = this.number
+        isRotating = true;
         if (animateType === 'sphere') {
           this.isLuckyDraw = true
           this.infiniteCycle()
@@ -263,6 +304,7 @@ new Vue({
             this.$nextTick(() => {
               this.addMonitorMouseScrolling()
             })
+            generateResult(users)
           }, animateDuration)
         }
       }
@@ -270,17 +312,20 @@ new Vue({
     // 停止抽奖
     stopLuckyDraw() {
       if (this.tempNumber === this.number) {
+        isRotating = false;
+        this.flipCards()
         if (this.luckyDrawTime) {
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
           this.users = this.lastUsers
           this.saveWinningUsers()
+          stopAnimate('grid')
         } else {
           this.removeMonitorMouseScrolling()
           this.isLuckyDraw = false
           this.numberPeople = undefined
           this.number += 1
-          stopAnimate('grid')
+          stopAnimate('sphere')
         }
       }
     },

@@ -1,224 +1,237 @@
 body {
-  /* position: relative; */
-	background-color: #000000;
+    /* position: relative; */
+    background-color: #000000;
 }
 .lucky-draw-view {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  animation: gradual 1.2s linear 1 3s;
-  animation-fill-mode: forwards;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    animation: gradual 1.2s linear 1 3s;
+    animation-fill-mode: forwards;
 }
 @keyframes gradual {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1.0;
-  }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
-.lucky-draw-tool-left, .lucky-draw-item-custom {
-  position: absolute;
-  display: flex;
-  white-space: nowrap;
-  left: 15px;
-  bottom: 15px;
+.lucky-draw-tool-left,
+.lucky-draw-item-custom {
+    position: absolute;
+    display: flex;
+    white-space: nowrap;
+    left: 15px;
+    bottom: 15px;
 }
 .lucky-draw-custom {
-  width: 150px;
+    width: 150px;
 }
-.lucky-draw-number, .lucky-draw-number-custom {
-  width: 150px;
+.lucky-draw-number,
+.lucky-draw-number-custom {
+    width: 150px;
 }
 /* 抽奖浮层 - 开始抽奖按钮 */
-.ant-input, .ant-btn, .ant-select-selection, .ant-select-arrow {
-  background-color: #000;
-  border-radius: 0px;
-  /* 按钮边框 */
-  border-color: rgba(127, 255, 255, 0.75);
-  /* 按钮字体 */
-  color: rgba(255, 255, 255, 0.75);
-  /* 按钮字体阴影 */
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+.ant-input,
+.ant-btn,
+.ant-select-selection,
+.ant-select-arrow {
+    background-color: #000;
+    border-radius: 0px;
+    /* 按钮边框 */
+    border-color: rgba(127, 255, 255, 0.75);
+    /* 按钮字体 */
+    color: rgba(255, 255, 255, 0.75);
+    /* 按钮字体阴影 */
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
 }
 /* 抽奖浮层 - 奖项 */
 .ant-select-dropdown {
-  /* 奖项背景 */
-  background-color: rgba(0, 127, 127, 0.5);
+    /* 奖项背景 */
+    background-color: rgba(0, 127, 127, 0.5);
 }
 .ant-select-dropdown-menu-item {
-  /* 奖项字体 */
-  color: rgba(255,255,255,0.75) !important;
-  /* 奖项字体阴影 */
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    /* 奖项字体 */
+    color: rgba(255, 255, 255, 0.75) !important;
+    /* 奖项字体阴影 */
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
 }
-.ant-select-dropdown-menu-item:hover, .ant-select-dropdown-menu-item-active, .ant-select-dropdown-menu-item-selected {
-  /* 奖项选中背景 */
-  background-color: rgba(0, 127, 127, 0.7) !important;
+.ant-select-dropdown-menu-item:hover,
+.ant-select-dropdown-menu-item-active,
+.ant-select-dropdown-menu-item-selected {
+    /* 奖项选中背景 */
+    background-color: rgba(0, 127, 127, 0.7) !important;
 }
 /* 抽奖浮层 - 抽奖按钮边框圆角，以下几个都是 */
 .ant-select-selection {
-  border-right: 0px;
-  border-top-left-radius: 5px;
-  background: #000 !important;
+    border-right: 0px;
+    border-top-left-radius: 5px;
+    background: #000 !important;
 }
 .lucky-draw-number .ant-input {
-  border-top-left-radius: 5px;
+    border-top-left-radius: 5px;
 }
 .lucky-draw-number-custom .ant-input {
-  border-top-left-radius: 0px;
+    border-top-left-radius: 0px;
 }
 .lucky-draw-tool-left .ant-btn {
-  border-left: 0px;
-  border-bottom-right-radius: 5px;
+    border-left: 0px;
+    border-bottom-right-radius: 5px;
 }
 .lucky-draw-content {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  background-color: rgba(0, 255, 255, 0);
-  transition: all 1s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    background-color: rgba(0, 255, 255, 0);
+    transition: all 1s;
 }
 /* 抽奖浮层 - 遮罩 */
 .lucky-draw-start {
-  opacity: 1;
-  /* 遮罩背景 */
-  background-color: rgba(0, 255, 255, 0.4);
+    opacity: 1;
+    /* 遮罩背景 */
+    background-color: rgba(77, 79, 149, 0.144);
 }
 /* 抽奖浮层 - 抽奖中间撑开承载用户名片的一栏 */
 .lucky-draw-users {
-  /* 抽奖栏背景 */
-  background-color: rgba(0, 255, 255, 0.4);
-  /* 抽奖栏阴影 */
-  box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.75);
-  /* 抽奖栏边框 */
-	border: 1px solid rgba(127, 255, 255, 0.75);
-  width: 100%;
-  opacity: 0.2;
-  height: 0px;
-  /* 抽奖栏撑开动画 */
-  transition: all 0.5s 0.8s;
-  display: flex;
-  align-items: center;
-  overflow-x: auto;
+    /* 抽奖栏背景 */
+    background-color: rgba(96, 99, 187, 0.4);
+    /* 抽奖栏阴影 */
+    box-shadow: 0px 0px 12px rgba(96, 99, 187, 0.75);
+    /* 抽奖栏边框 */
+    border: 3px solid rgba(247, 232, 173, 1);
+    width: calc(100% - 20px); /* 让宽度小于100%以留出外侧距离 */
+    opacity: 0.2;
+    height: 0px;
+    /* 抽奖栏撑开动画 */
+    transition: all 0.5s 0.8s;
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    margin: 10px; /* 设置外边距 */
 }
 /* 抽奖浮层 - 开始抽奖从中间撑开 */
 .lucky-draw-users-start {
-  opacity: 1.0;
-  height: 260px;
+    opacity: 1;
+    height: 260px;
 }
 /* 隐藏滚动条 */
 .hide-scrollbar {
-  scrollbar-width: none;
-  scrollbar-color: transparent transparent;
+    scrollbar-width: none;
+    scrollbar-color: transparent transparent;
 }
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 /* 展示滚动条 */
 /* 定义滚动条的背景色 */
 .show-scrollbar::-webkit-scrollbar {
-  background: transparent;
+    background: transparent;
 }
 /* 定义滚动条轨道的颜色 */
 .show-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+    background: transparent;
 }
 /* 定义滚动条滑块的颜色 */
 .show-scrollbar::-webkit-scrollbar-thumb {
-  background: #fff;
-  border-radius: 6px;
+    background: #fff;
+    border-radius: 6px;
 }
 /* 定义滚动条滑块在鼠标悬停时的颜色 */
 .show-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 255, 0.75);
+    background: rgba(144, 135, 101, 0.75);
 }
 /* 抽奖浮层 - 滚动名片容器 */
 .lucky-draw-users-content {
-  margin: auto;
-  display: flex;
+    margin: auto;
+    display: flex;
 }
 /* 抽奖浮层 - 单张名片 */
 .lucky-draw-user {
-  flex-shrink: 0;
-  width: 140px;
-  height: 180px;
-  margin-right: 15px;
-  /* 名片背景 */
-  /* background-color: rgba(0, 255, 255, 0.4); */
-  background-color: rgba(0, 0, 0, 0.4);
-  /* 名片阴影 */
-  box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.75);
-  /* 名片边框 */
-  border: 1px solid rgba(127, 255, 255, 0.75);
-	position: relative;
-  display: flex;
-	align-items: center;
-	justify-content: center;
-  flex-direction: column;
+    flex-shrink: 0;
+    width: 100px;
+    height: 180px;
+    margin-right: 15px;
+    /* 名片背景 */
+    /* background-color: rgba(0, 255, 255, 0.4); */
+    background-color: rgba(0, 0, 0, 0.4);
+    background-image: url("../fig/back.png"); /* 导入背景图片 */
+    background-size: cover; /* 背景图片自适应 */
+    background-position: center; /* 背景图片居中 */
+    /* 名片阴影 */
+    box-shadow: 0px 0px 12px rgba(67, 63, 47, 0.75);
+    /* 名片边框 */
+    border: 1px solid rgba(247, 232, 173, 0.75);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    /* 3D 视角 */
+    perspective: 1000px;
 }
 .lucky-draw-user:first-child {
-  margin-left: 15px;
+    margin-left: 15px;
 }
 /* 抽奖浮层 - 单张名片 - 用户名 */
 .lucky-draw-user-name {
-  width: 100%;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: center;
-  word-wrap: break-word;
-  /* 用户名颜色 */
-  /* color: rgba(255, 255, 255, 0.75); */
-  color: #fff;
-  /* 用户名阴影 */
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    width: 100%;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    word-wrap: break-word;
+    /* 用户名颜色 */
+    /* color: rgba(255, 255, 255, 0.75); */
+    color: #fff;
+    /* 用户名阴影 */
+    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }
 /* 抽奖浮层 - 单张名片 - 职位 */
 .lucky-draw-user-department {
-	position: absolute;
-	bottom: 14px;
-  /* 职位颜色 */
-  /* color: rgba(255, 255, 255, 0.75); */
-  color: #fff;
-  /* 职位阴影 */
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    position: absolute;
+    bottom: 14px;
+    /* 职位颜色 */
+    /* color: rgba(255, 255, 255, 0.75); */
+    color: #fff;
+    /* 职位阴影 */
+    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }
 /* 抽奖浮层 - 老板大气，已经人人中奖了！ */
 .lucky-draw-empty {
-  margin: auto;
-  font-size: 40px;
-  font-weight: 700;
-  /* 字体颜色 */
-  color: rgba(255, 255, 255, 0.75);
-  /* 字体阴影 */
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    margin: auto;
+    font-size: 40px;
+    font-weight: 700;
+    /* 字体颜色 */
+    color: rgba(255, 255, 255, 0.75);
+    /* 字体阴影 */
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
 }
 /* 右边工具栏 */
 .lucky-draw-tool-right {
-  position: absolute;
-  display: flex;
-  white-space: nowrap;
-  right: 15px;
-  bottom: 15px;
+    position: absolute;
+    display: flex;
+    white-space: nowrap;
+    right: 15px;
+    bottom: 15px;
 }
 .lucky-draw-tool-button {
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .lucky-draw-tool-button .anticon {
-  display: flex;
+    display: flex;
 }
 .lucky-draw-tool-button:not(:last-child) {
-  margin-right: 12px;
+    margin-right: 12px;
 }

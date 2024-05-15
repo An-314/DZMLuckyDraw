@@ -37,17 +37,17 @@ if (users.length > maxCount) {
 }
 
 // 属性
-var camera, scene, renderer, cssRenderer
-
-var clock = new THREE.Clock(true); // 初始化时钟，true参数表示立即开始计时
-var isinit = false
+var camera, scene, renderer, cssScene, cssRenderer, objects = [];
+var cssObjects = []; // 用于CSS3D的卡片对象
+var clock = new THREE.Clock(); // 时钟对象，用于计算时间间隔
+var isRotating = false
 
 // 名片3D坐标
 var objects = []
 var targets = { sphere: [], grid: [] }
 
 // 动画类型
-var animateTypes = ['sphere', 'grid', 'none', 'rotate']
+var animateTypes = ['sphere', 'grid', 'none']
 var animateType = undefined
 var animateDuration = 3000
 
@@ -56,9 +56,6 @@ animate()
 
 // 初始化
 function init() {
-	var clock = new THREE.Clock(); // 时钟对象，用于计算时间间隔
-	clock.start(); // 启动时钟
-
 	// 摄像机
 	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000)
 	camera.position.z = 3000;
@@ -100,37 +97,87 @@ function init() {
 			object.lookAt(vector);
 			targets.sphere.push(object);
 		}
+		// grid
+		for (var i = 0; i < objects.length; i++) {
+			var object = new THREE.Object3D();
+			object.position.x = ((i % 10) * 400) - 1800;
+			object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800;
+			object.position.z = (Math.floor(i / 25)) * 1000 - perspective;
+			targets.grid.push(object);
+		}
 	});
 
-	console.log(targets)
-
-	// grid
-	for (var i = 0; i < objects.length; i++) {
-		var object = new THREE.Object3D();
-		object.position.x = ((i % 10) * 400) - 1800;
-		object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800;
-		object.position.z = (Math.floor(i / 25)) * 1000 - perspective;
-		targets.grid.push(object);
-	}
-
-	// 父容器
+	// WebGLRenderer
 	renderer = new THREE.WebGLRenderer();
-	// renderer = new THREE.WebGLRenderer();  // 使用WebGLRenderer代替CSS3DRenderer
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.domElement.style.position = 'absolute';
 	document.getElementById('container').appendChild(renderer.domElement);
 
+	// CSS3DRenderer
+	cssRenderer = new THREE.CSS3DRenderer();
+	cssRenderer.setSize(window.innerWidth, window.innerHeight);
+	cssRenderer.domElement.style.position = 'absolute';
+	cssRenderer.domElement.style.top = 0;
+	document.getElementById('container').appendChild(cssRenderer.domElement);
 
-	// 初始化完成
-	isinit = true
 	// 开始
 	onlyAnimate();
 	// 监听浏览器尺寸
 	window.addEventListener('resize', onWindowResize, false);
 }
 
+// 创建CSS3D卡片对象
+function createCSS3DCards() {
+	var element, front, back;
+
+	for (var i = 0, l = userPros.length; i < l; i++) {
+		element = document.createElement('div');
+		element.className = 'card';
+
+		front = document.createElement('div');
+		front.className = 'card-front';
+		front.textContent = 'Back Side'; // 背面内容
+		element.appendChild(front);
+
+		back = document.createElement('div');
+		back.className = 'card-back';
+		back.innerHTML = `<div>${userPros[i].name}</div><div>${userPros[i].department}</div>`; // 正面内容
+		element.appendChild(back);
+
+		var objectCSS = new THREE.CSS3DObject(element);
+		objectCSS.position.x = (i - userPros.length / 2) * 160;
+		objectCSS.position.y = 0;
+		objectCSS.position.z = 0;
+		cssScene.add(objectCSS);
+		cssObjects.push(objectCSS);
+	}
+}
+
+// 动画函数
+function animate() {
+	requestAnimationFrame(animate);
+	TWEEN.update();
+	renderer.render(scene, camera);
+	cssRenderer.render(cssScene, camera);
+}
+
+// 卡片翻转函数
+function flipCards() {
+	for (var i = 0; i < cssObjects.length; i++) {
+		new TWEEN.Tween(cssObjects[i].rotation)
+			.to({ y: Math.PI }, 1000)
+			.easing(TWEEN.Easing.Quadratic.InOut)
+			.start();
+	}
+}
+
+window.flipCards = flipCards;  // 暴露函数以便外部调用
+
+
 // 刷新坐标
 function reloadGridPosition() {
+	console.log('reloadGridPosition')
+	console.log(targets.grid)
 	for (var i = 0; i < targets.grid.length; i++) {
 		var scale = Number((Math.random() + 0.2).toFixed(1))
 		var newPerspective = Number((perspective * scale).toFixed(0))
@@ -139,6 +186,7 @@ function reloadGridPosition() {
 		// object.position.y = (- (Math.floor(i / 10) % 5) * 400) + 800
 		object.position.z = (Math.floor(i / 25)) * 1000 - newPerspective
 	}
+	console.log(targets.grid)
 }
 
 // 刷新3D定位
@@ -167,15 +215,14 @@ function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight
 	camera.updateProjectionMatrix()
 	renderer.setSize(window.innerWidth, window.innerHeight)
+	cssRenderer.setSize(window.innerWidth, window.innerHeight);
 	render()
 }
 
 // 动画
 function animate() {
 	requestAnimationFrame(animate);
-	// update(); // 更新物体状态
-	console.log('animateType', animateType)
-	if (isinit) {
+	if (isRotating) {
 		update();
 	}
 	TWEEN.update();
@@ -225,16 +272,82 @@ function setAnimate(type) {
 // 旋转
 function update() {
 	var elapsed = clock.getElapsedTime();
-
 	for (var i = 0; i < objects.length; i++) {
 		var object = objects[i];
-		var angle = elapsed + i * 0.175 + Math.PI
-		// object.rotation.y = angle;
-		object.position.y = - (i * 8) + 900;
-		object.position.x = 900 * Math.sin(angle);
-		object.position.z = 900 * Math.cos(angle);
+		var angle = i * 0.175 + Math.PI + elapsed * 1.2;
+		var targetX = 900 * Math.sin(angle);
+		var targetZ = 900 * Math.cos(angle);
+		// 创建TWEEN动画
+		new TWEEN.Tween(object.position)
+			.to({ x: targetX, z: targetZ }, 100)
+			.easing(TWEEN.Easing.Quadratic.Out)
+			.start();
+	}
+	// 更新TWEEN
+	TWEEN.update();
+}
+
+
+function generateResult(users) {
+	var textureLoader = new THREE.TextureLoader();
+	var backMaterial, frontMaterials = [];
+
+	// 加载背面贴图
+	textureLoader.load('../fig/back.png', function (backTexture) {
+		backMaterial = new THREE.MeshBasicMaterial({ map: backTexture });
+		// 加载正面贴图
+		textureLoader.load('../fig/front.png', function (frontTexture) {
+			users.forEach((user, index) => {
+				var canvas = document.createElement('canvas');
+				canvas.width = 512;
+				canvas.height = 512;
+				var context = canvas.getContext('2d');
+				// 绘制正面贴图
+				context.drawImage(frontTexture.image, 0, 0);
+				// 设置用户数据
+				context.font = '30px Arial';
+				context.fillStyle = 'white';
+				context.fillText(user.name, 20, 470); // 显示用户名
+				context.fillText(user.department, 20, 510); // 显示用户部门
+				var userTexture = new THREE.CanvasTexture(canvas);
+				var userMaterial = new THREE.MeshBasicMaterial({ map: userTexture });
+				frontMaterials.push(userMaterial);
+			});
+
+			createCards();
+		});
+	});
+	function createCards() {
+		var geometry = new THREE.PlaneGeometry(300, 500); // 卡片大小
+		for (var i = 0; i < users.length; i++) {
+			// 创建正反两面的材质
+			var materials = [
+				backMaterial,
+				frontMaterials[i]
+			];
+			// 使用正反两面的材质创建Mesh
+			var mesh = new THREE.Mesh(geometry, materials);
+			// 将卡片放置在屏幕中央
+			mesh.position.set(0, 0, 0);
+			// 将卡片添加到场景中
+			scene.add(mesh);
+			objects.push(mesh);
+		}
 	}
 }
+
+
+
+// function update() {
+// 	var elapsed = clock.getElapsedTime();
+// 	for (var i = 0; i < objects.length; i++) {
+// 		var object = objects[i]
+// 		var angle = i * 0.175 + Math.PI + elapsed;
+// 		// object.rotation.y = angle;
+// 		object.position.x = 900 * Math.sin(angle);
+// 		object.position.z = 900 * Math.cos(angle);
+// 	}
+// }
 
 
 // // 初始化
