@@ -72,7 +72,7 @@ function init() {
 	var geometry = new THREE.BoxGeometry(130, 220, 5);  // 盒子模型，代表扑克牌
 	// 加载贴图
 	var textureLoader = new THREE.TextureLoader();
-	textureLoader.load('../fig/back.png', function (texture) {
+	textureLoader.load('./fig/back.png', function (texture) {
 		var material = new THREE.MeshBasicMaterial({ map: texture });  // 使用贴图创建材质
 		var vector = new THREE.Vector3();
 		console.log(userPros);
@@ -105,6 +105,8 @@ function init() {
 			targets.grid.push(object);
 		}
 	});
+	console.log('targets', targets);
+	console.log('objects', objects);
 	// WebGLRenderer
 	renderer = new THREE.WebGLRenderer({ alpha: true });
 	renderer.setClearColor(0x000000, 0);

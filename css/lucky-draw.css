@@ -36,6 +36,25 @@ body {
     width: 150px;
 }
 /* 抽奖浮层 - 开始抽奖按钮 */
+.ant-btn {
+    transition: none !important;
+}
+.ant-btn:hover {
+    transition: none !important;
+    background-color: #000;
+}
+.ant-btn:focus {
+    transition: none !important;
+    background-color: #000;
+}
+.ant-btn:active {
+    transition: none !important;
+    background-color: #000;
+}
+.ant-btn:disabled {
+    transition: none !important;
+    background-color: #000;
+}
 .ant-input,
 .ant-btn,
 .ant-select-selection,

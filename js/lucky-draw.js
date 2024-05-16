@@ -100,7 +100,7 @@ new Vue({
           :class="modeType == 1 ? 'lucky-draw-number-custom' : 'lucky-draw-number'"
           :disabled="isLuckyDraw"
           v-model="numberPeople"
-          placeholder="本轮抽奖人数"
+          :placeholder="placeholderText""
         />
         <!-- 抽奖按钮 -->
         <a-button 
@@ -170,7 +170,9 @@ new Vue({
       // 鼠标滚动元素
       mouseScrollingElement: null,
       // 卡片翻转状态
-      isResult: false
+      isResult: false,
+      // 输入框提示
+      placeholderText: '本轮抽奖人数'
     }
   },
   mounted() {
@@ -223,6 +225,13 @@ new Vue({
     handleModeTypeChange(value, e) {
       // 记录奖项
       this.custom = e.data.attrs.item
+      if (this.custom?.tag > 0) {
+        this.numberPeople = this.custom?.tag
+        this.placeholderText = `${this.custom?.tag}`
+      } else {
+        this.numberPeople = undefined
+        this.placeholderText = '本轮抽奖人数'
+      }
     },
     luckyDraw() {
       // 是否在抽奖
@@ -252,11 +261,11 @@ new Vue({
           this.$message.error(`抽奖名单共 ${users.length} 人，填写抽奖人数必须小于或等于 ${users.length} 人`)
           return
         }
-        if (this.custom.tag == -1 && this.numberPeople % 5 != 0) {
+        if (this.custom?.tag == -1 && this.numberPeople % 5 != 0) {
           this.$message.error('抽奖人数必须是5的倍数')
           return
         }
-        if (this.custom.tag == 0 && this.numberPeople != 1) {
+        if (this.custom?.tag == 0 && this.numberPeople != 1) {
           this.$message.error('抽奖人数必须是1')
           return
         }
@@ -297,7 +306,6 @@ new Vue({
       if (this.tempNumber === this.number) {
         isRotating = false;
         flipCards()
-        this.updateDispalyUsers()
         if (this.luckyDrawTime) {
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
@@ -355,8 +363,8 @@ new Vue({
     },
     // 更新抽奖名单
     updateNumberUsers() {
-      if (this.custom.tag !== -1 && this.custom.tag !== 0) {
-        const tempUsers = []
+      const tempUsers = []
+      if ((this.custom?.tag !== -1 && this.custom?.tag !== 0) || this.custom?.tag == undefined) {
         var number = 0;
         const total = users.length
         while (number < this.numberPeople) {
@@ -367,20 +375,19 @@ new Vue({
         }
         this.users = tempUsers
       }
-      if (this.custom.tag == -1) {
+      if (this.custom?.tag == -1) {
         // 每位数字都从0-9中随机
         var tempDisplayUsers = [...this.displayUsers]
         for (var i = 0; i < this.isSaperate * this.numberPeople; i++) {
           tempDisplayUsers[i].name = parseInt(Math.random() * 10)
         }
         this.displayUsers = tempDisplayUsers
-      } else if (this.custom.tag == 0) {
+      } else if (this.custom?.tag == 0) {
         var tempDisplayUsers = [...this.displayUsers]
         for (var i = 0; i < this.displayUsers.length; i++) {
           tempDisplayUsers[i].name = parseInt(Math.random() * 10)
         }
         this.displayUsers = tempDisplayUsers
-        this.displayUsers = tempUsers
       } else {
         this.displayUsers = tempUsers
       }
@@ -432,16 +439,6 @@ new Vue({
       }
       this.revealSaperatedUsers()
     },
-    updateDispalyUsers() {
-      if (this.custom.tag == 0) {
-        var tempDisplayUsers = [...this.displayUsers]
-        const resultUsers = this.saperateUsers(this.lastUsers)
-        for (var i = 0; i < tempDisplayUsers.length; i++) {
-          tempDisplayUsers[i].name = resultUsers[tempDisplayUsers.length - 1 - i].name
-        }
-        this.displayUsers = tempDisplayUsers
-      }
-    },
     // 将dispalyCards中的后isSaperate * numberPeople个数字变成正确的数字
     revealSaperatedUsers() {
       var tempDisplayUsers = [...this.displayUsers]
@@ -476,7 +473,7 @@ new Vue({
               }
             }
           } else if (this.modeType == 1) { // 自定义奖项模式
-            if (user.number == this.custom.tag && this.custom.tag != 0) {
+            if (user.number == this.custom?.tag && this.custom?.tag != 0) {
               if (lastUsers.length < this.numberPeople) {
                 lastUsers.push(user)
                 // 不可以重复中奖
@@ -564,10 +561,10 @@ new Vue({
       }
       // 记录本轮中奖名单
       this.lastUsers = lastUsers
-      if (this.custom.tag == -1) {
+      if (this.custom?.tag == -1) {
         this.displayUsers = this.saperateUsers(lastUsers)
         this.isSaperate = 4
-      } else if (this.custom.tag == 0) {
+      } else if (this.custom?.tag == 0) {
         this.displayUsers = this.saperateUsers(lastUsers)
       } else {
         this.displayUsers = lastUsers

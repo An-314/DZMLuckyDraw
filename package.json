@@ -1,0 +1,29 @@
+{
+    "name": "wei-gacha",
+    "version": "1.0.0",
+    "description": "⌈未来式⌋抽卡器",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "dist": "electron-builder"
+    },
+    "build": {
+        "files": [
+            "css/**/*",
+            "fig/**/*",
+            "js/**/*",
+            "lib/**/*",
+            "index.html",
+            "lucky-draw.html",
+            "main.js",
+            "preload.js"
+        ],
+        "win": {
+            "target": "nsis"
+        }
+    },
+    "devDependencies": {
+        "electron": "^latest",
+        "electron-builder": "^latest"
+    }
+}
