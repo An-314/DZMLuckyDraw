@@ -3,9 +3,11 @@
     "version": "1.0.0",
     "description": "⌈未来式⌋抽卡器",
     "main": "main.js",
+    "bin": "main.js",
     "scripts": {
         "start": "electron .",
-        "dist": "electron-builder"
+        "dist": "electron-builder",
+        "pkg": "pkg . --out-dir dist"
     },
     "build": {
         "files": [
@@ -22,8 +24,18 @@
             "target": "nsis"
         }
     },
+    "pkg": {
+        "scripts": [
+            "main.js"
+        ],
+        "targets": [
+            "node14-win-x64"
+        ],
+        "outputPath": "dist"
+    },
     "devDependencies": {
-        "electron": "^latest",
-        "electron-builder": "^latest"
+        "electron": "latest",
+        "electron-builder": "latest",
+        "pkg": "latest"
     }
 }
