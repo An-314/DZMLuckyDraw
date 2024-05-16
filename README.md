@@ -19,6 +19,8 @@
   Your browser does not support the video tag.
 </video>
 
+![demo gif](demo.gif)
+
 ## 特别鸣谢
 
 Fork 自 [DZMLuckyDraw](https://github.com/dengzemiao/DZMLuckyDraw)。在原有的基础上做了很多修改：
