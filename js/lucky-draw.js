@@ -297,6 +297,7 @@ new Vue({
       if (this.tempNumber === this.number) {
         isRotating = false;
         flipCards()
+        this.updateDispalyUsers()
         if (this.luckyDrawTime) {
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
@@ -431,11 +432,20 @@ new Vue({
       }
       this.revealSaperatedUsers()
     },
+    updateDispalyUsers() {
+      if (this.custom.tag == 0) {
+        var tempDisplayUsers = [...this.displayUsers]
+        const resultUsers = this.saperateUsers(this.lastUsers)
+        for (var i = 0; i < tempDisplayUsers.length; i++) {
+          tempDisplayUsers[i].name = resultUsers[tempDisplayUsers.length - 1 - i].name
+        }
+        this.displayUsers = tempDisplayUsers
+      }
+    },
     // 将dispalyCards中的后isSaperate * numberPeople个数字变成正确的数字
     revealSaperatedUsers() {
       var tempDisplayUsers = [...this.displayUsers]
       const resultUsers = this.saperateUsers(this.lastUsers)
-      console.log("revealSaperatedUsers", resultUsers)
       for (var i = this.isSaperate * this.numberPeople; i < tempDisplayUsers.length; i++) {
         tempDisplayUsers[i].name = resultUsers[i].name
       }
