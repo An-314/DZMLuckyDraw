@@ -320,6 +320,13 @@ new Vue({
           this.number += 1
           stopAnimate('sphere')
         }
+        if (this.custom?.tag > 0) {
+          this.numberPeople = this.custom?.tag
+          this.placeholderText = `${this.custom?.tag}`
+        } else {
+          this.numberPeople = undefined
+          this.placeholderText = '本轮抽奖人数'
+        }
       }
     },
     // 添加鼠标滚轮事件
