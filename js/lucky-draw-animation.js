@@ -40,9 +40,12 @@ if (users.length > maxCount) {
 var camera, scene, renderer, cssScene, cssRenderer;
 var objects = [];
 var cssObjects = []; // 用于CSS3D的卡片对象
+var rotatingCards = []; // 用于旋转的卡片对象
 var clock = new THREE.Clock(); // 时钟对象，用于计算时间间隔
 var isRotating = false
 var isCardRotating = false
+var cardRotatingIndex = []
+
 
 // 名片3D坐标
 var objects = []
@@ -126,6 +129,9 @@ function init() {
 
 function createCSS3DCards(users) {
 	console.log('createCSS3DCards', users);
+	// cardRotatingIndex是0到users.length-1的数组，用于记录哪些卡片需要旋转
+	cardRotatingIndex = Array.from({ length: users.length }, (_, i) => i);
+	console.log('cardRotatingIndex', cardRotatingIndex);
 	// 清除旧的CSS3D对象
 	clearCSSObjects();
 	let element, front, back;
@@ -194,7 +200,6 @@ function createCSS3DCards(users) {
 // 更新CSS3D卡片
 function updateCSS3DCards(users) {
 	console.log('updateCSS3DCards', users);
-	// 假设 cssObjects 数组长度和 users 数组长度相同
 	for (let i = 0; i < users.length; i++) {
 		let objectCSS = cssObjects[i];
 		let element = objectCSS.element;
@@ -348,14 +353,21 @@ function update() {
 	}
 	// 绕对称轴旋转
 	for (var i = 0; i < cssObjects.length; i++) {
-		var object = cssObjects[i];
-		var angle = elapsed * 3;
-		object.rotation.y = angle;
-		new TWEEN.Tween(object.rotation)
-			.to({ y: angle }, 50)
-			.easing(TWEEN.Easing.Quadratic.Out)
-			.start();
+		// 如果在cardRotatingIndex中
+		if (i in cardRotatingIndex) {
+			var object = cssObjects[i];
+			var angle = elapsed * 3;
+			object.rotation.y = angle;
+			new TWEEN.Tween(object.rotation)
+				.to({ y: angle }, 50)
+				.easing(TWEEN.Easing.Quadratic.Out)
+				.start();
+		} else {
+			cssObjects[i].rotation.y = Math.PI;
+		}
 	}
 	// 更新TWEEN
 	TWEEN.update();
 }
+
+

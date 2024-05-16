@@ -103,9 +103,17 @@ new Vue({
           placeholder="本轮抽奖人数"
         />
         <!-- 抽奖按钮 -->
-        <a-button @click="luckyDraw">
-          {{ isLuckyDraw ?  luckyDrawTime ? '停止抽奖' : '结束本轮' : '开始抽奖' }}
+        <a-button 
+          @click="luckyDraw" 
+          :disabled="isSaperate !== 0">
+          {{ isLuckyDraw ? (luckyDrawTime ? '停止抽奖' : '结束本轮') : '开始抽奖' }}
         </a-button>
+        <!-- 分开展示 -->
+        <div>
+          <a-button v-if="isSaperate !== 0" @click="saperatingStop">
+            继续揭示
+          </a-button>
+        </div>
       </div>
       <!-- 右边工具栏 -->
       <div class="lucky-draw-tool-right">
@@ -139,9 +147,12 @@ new Vue({
       numberPeople: undefined,
       // 抽奖状态
       isLuckyDraw: false,
+      // 在分开模式
+      isSaperate: 0,
       // 滚动名单
       users: [],
       lastUsers: [],
+      displayUsers: [],
       // 0 默认抽奖模式，1 自定义抽奖模式
       modeType: 0,
       // 0 不可以重复中奖 1、同轮可以重复中奖 2、同轮不可以重复中奖，不同轮可以重复中奖
@@ -203,8 +214,8 @@ new Vue({
     }
   },
   watch: {
-    users: function (newUsers) {
-      updateCSS3DCards(newUsers);
+    displayUsers: function (newDisplayUsers) {
+      updateCSS3DCards(newDisplayUsers);
     },
   },
   methods: {
@@ -269,7 +280,7 @@ new Vue({
             generateResult(users)
           }, animateDuration)
         }
-        createCSS3DCards(this.lastUsers);
+        createCSS3DCards(this.displayUsers);
         isCardRotating = true;
       }
     },
@@ -335,17 +346,92 @@ new Vue({
     },
     // 更新抽奖名单
     updateNumberUsers() {
-      const tempUsers = []
-      var number = 0;
-      const total = users.length
-      while (number < this.numberPeople) {
-        const index = parseInt(Math.random() * total)
-        const user = users[index]
-        if (user) { tempUsers.push(user) }
-        number++;
+      if (this.custom.tag != -1) {
+        const tempUsers = []
+        var number = 0;
+        const total = users.length
+        while (number < this.numberPeople) {
+          const index = parseInt(Math.random() * total)
+          const user = users[index]
+          if (user) { tempUsers.push(user) }
+          number++;
+        }
+        this.users = tempUsers
       }
-      this.users = tempUsers
+      if (this.custom.tag == -1) {
+        console.log('特殊模式')
+        // 每位数字都从0-9中随机
+        var tempDisplayUsers = [...this.displayUsers]
+        for (var i = 0; i < this.isSaperate * this.numberPeople; i++) {
+          // for (var i = 0; i < tempDisplayUsers.length; i++) {
+          tempDisplayUsers[i].name = parseInt(Math.random() * 10)
+        }
+        this.displayUsers = tempDisplayUsers
+        console.log(this.displayUsers)
+      } else if (this.custom.tag == 0) {
+        this.displayUsers = tempUsers
+      } else {
+        this.displayUsers = tempUsers
+      }
     },
+    // 把users中的数据每一个变成4位数，不够的前面补0
+    saperateUsers(users) {
+      // 首先，将每个用户的名字分成四部分
+      console.log("saperateUsers", users)
+      const separatedUsers = users.flatMap(user => {
+        const paddedName = user.name.padStart(4, '0'); // 在前面补0，确保至少有4位
+        const segments = [
+          paddedName.slice(0, paddedName.length - 3), // 提取从开头到倒数第四位的部分
+          paddedName.slice(paddedName.length - 3, paddedName.length - 2), // 提取倒数第三位
+          paddedName.slice(paddedName.length - 2, paddedName.length - 1), // 提取倒数第二位
+          paddedName.slice(paddedName.length - 1) // 提取最后一位
+        ];
+        // 创建四个新用户对象
+        return segments.map(segment => ({
+          id: user.id,
+          name: segment,
+          department: user.department
+        }));
+      });
+      // 按交错的顺序重新排列
+      const result = [];
+      const userCount = users.length;
+      for (let i = 3; i >= 0; i--) {
+        for (let j = 0; j < userCount; j++) {
+          result.push(separatedUsers[j * 4 + i]);
+        }
+      }
+      return result;
+    },
+    // 继续揭示
+    saperatingStop() {
+      if (this.isSaperate == 4) {
+        this.isSaperate = 3
+        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
+
+      } else if (this.isSaperate == 3) {
+        this.isSaperate = 2
+        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
+      } else if (this.isSaperate == 2) {
+        this.isSaperate = 0
+        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
+      } else {
+        this.isSaperate = 4
+        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
+      }
+      this.revealSaperatedUsers()
+    },
+    // 将dispalyCards中的后isSaperate * numberPeople个数字变成正确的数字
+    revealSaperatedUsers() {
+      var tempDisplayUsers = [...this.displayUsers]
+      const resultUsers = this.saperateUsers(this.lastUsers)
+      console.log("revealSaperatedUsers", resultUsers)
+      for (var i = this.isSaperate * this.numberPeople; i < tempDisplayUsers.length; i++) {
+        tempDisplayUsers[i].name = resultUsers[i].name
+      }
+      this.displayUsers = tempDisplayUsers
+    },
+    // 初次获取中奖名单
     GetUsers() {
       // 剩余用户
       const surplusUsers = [...this.surplusUsers]
@@ -458,6 +544,14 @@ new Vue({
       }
       // 记录本轮中奖名单
       this.lastUsers = lastUsers
+      if (this.custom.tag == -1) {
+        this.displayUsers = this.saperateUsers(lastUsers)
+        this.isSaperate = 4
+      }
+      else {
+        this.displayUsers = lastUsers
+      }
+      rotatingCards = lastUsers
     },
     // 保存中奖名单
     saveWinningUsers() {
