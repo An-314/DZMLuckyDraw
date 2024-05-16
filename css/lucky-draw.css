@@ -43,29 +43,29 @@ body {
     background-color: #000;
     border-radius: 0px;
     /* 按钮边框 */
-    border-color: rgba(127, 255, 255, 0.75);
+    border-color: rgba(96, 99, 187, 0.75);
     /* 按钮字体 */
     color: rgba(255, 255, 255, 0.75);
     /* 按钮字体阴影 */
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    text-shadow: 0 0 10px rgba(96, 99, 187, 0.95);
     z-index: 10;
 }
 /* 抽奖浮层 - 奖项 */
 .ant-select-dropdown {
     /* 奖项背景 */
-    background-color: rgba(0, 127, 127, 0.5);
+    background-color: rgba(96, 99, 187, 0.5);
 }
 .ant-select-dropdown-menu-item {
     /* 奖项字体 */
     color: rgba(255, 255, 255, 0.75) !important;
     /* 奖项字体阴影 */
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }
 .ant-select-dropdown-menu-item:hover,
 .ant-select-dropdown-menu-item-active,
 .ant-select-dropdown-menu-item-selected {
     /* 奖项选中背景 */
-    background-color: rgba(0, 127, 127, 0.7) !important;
+    background-color: rgba(96, 99, 187, 0.7) !important;
 }
 /* 抽奖浮层 - 抽奖按钮边框圆角，以下几个都是 */
 .ant-select-selection {

@@ -14,9 +14,9 @@ body {
     width: 170px;
     height: 210px;
     /* 名片阴影 */
-    box-shadow: 0px 0px 12px rgba(0, 255, 255, 0.5);
+    box-shadow: 0px 0px 12px rgba(247, 232, 173, 0.5);
     /* 名片边框 */
-    border: 1px solid rgba(127, 255, 255, 0.25);
+    border: 1px solid rgba(247, 232, 173, 0.25);
     /* 名片背景（内部有根据位置计算，每张名片背景颜色有微调） */
     /* /js/lucky-draw-animation.js 文件中找到 '名片背景颜色' 位置，有  */
     /* background-color: red !important; */
@@ -43,7 +43,7 @@ body {
     /* 用户名颜色 */
     color: rgba(255, 255, 255, 0.75);
     /* 用户名阴影 */
-    text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
+    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
 }
 /* 单张名片 - 职位 */
 .element .details {
@@ -53,7 +53,7 @@ body {
     right: 0px;
     font-size: 20px;
     /* 职位颜色 */
-    color: rgba(127, 255, 255, 0.75);
+    color: rgba(247, 232, 173, 0.75);
 }
 /* .element .number {
 	position: absolute;

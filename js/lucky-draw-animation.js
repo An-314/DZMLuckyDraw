@@ -81,7 +81,6 @@ function init() {
 			mesh.position.z = Math.random() * 4000 - 2000;
 			scene.add(mesh);
 			objects.push(mesh);
-
 			// sphere
 			var phi = i * 0.175 + Math.PI;
 			var object = new THREE.Object3D();
@@ -118,7 +117,6 @@ function init() {
 	cssRenderer.domElement.style.zIndex = 1;
 	cssRenderer.domElement.style.pointerEvents = 'none';
 	document.getElementById('container').appendChild(cssRenderer.domElement);
-
 	// 开始
 	onlyAnimate();
 	// 监听浏览器尺寸

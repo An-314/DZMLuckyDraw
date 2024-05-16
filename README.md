@@ -18,3 +18,11 @@
   <source src="demo.mp4" type="video/mp4">
   Your browser does not support the video tag.
 </video>
+
+## 特别鸣谢
+
+Fork 自 [DZMLuckyDraw](https://github.com/dengzemiao/DZMLuckyDraw)。在原有的基础上做了很多修改：
+- 初始化两个 `THREE.Scene()` ，一个用于显示抽奖结果，一个用于显示抽奖效果。
+- 初始化两个renderer，分别处理WebGL和CSS3D。
+- 重新更改了抽奖动画，使其更符合学生节的主题。
+- 更改了抽奖结果的显示方式，使其不再廉价。
