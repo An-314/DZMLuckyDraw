@@ -6,7 +6,11 @@
 
 依赖 `Three.js` 和 `Vue.js` 实现。
 
-后续可能会打包成 `exe` 文件，方便使用。
+可以用 `electron` 打包成 `exe` 文件
+```bash
+npm install
+npm run build
+```
 
 ## 使用
 
@@ -36,3 +40,4 @@ Fork 自 [DZMLuckyDraw](https://github.com/dengzemiao/DZMLuckyDraw)。在原有�
 - 新增功能：**特等奖抽取**
   - 在设置“自定义类型”的时候，将“标签”设为0，即可开启抽四位随机数。
   - 选择抽奖人数为1。
+- 细节优化：在设置“自定义类型”的时候，将“标签”设为大于0的数，则默认抽取该标签的人数。
