@@ -252,6 +252,14 @@ new Vue({
           this.$message.error(`抽奖名单共 ${users.length} 人，填写抽奖人数必须小于或等于 ${users.length} 人`)
           return
         }
+        if (this.custom.tag == -1 && this.numberPeople % 5 != 0) {
+          this.$message.error('抽奖人数必须是5的倍数')
+          return
+        }
+        if (this.custom.tag == 0 && this.numberPeople != 1) {
+          this.$message.error('抽奖人数必须是1')
+          return
+        }
         // 开始抽奖
         this.startLuckyDraw()
       }
@@ -346,7 +354,7 @@ new Vue({
     },
     // 更新抽奖名单
     updateNumberUsers() {
-      if (this.custom.tag != -1) {
+      if (this.custom.tag !== -1 && this.custom.tag !== 0) {
         const tempUsers = []
         var number = 0;
         const total = users.length
@@ -359,16 +367,18 @@ new Vue({
         this.users = tempUsers
       }
       if (this.custom.tag == -1) {
-        console.log('特殊模式')
         // 每位数字都从0-9中随机
         var tempDisplayUsers = [...this.displayUsers]
         for (var i = 0; i < this.isSaperate * this.numberPeople; i++) {
-          // for (var i = 0; i < tempDisplayUsers.length; i++) {
           tempDisplayUsers[i].name = parseInt(Math.random() * 10)
         }
         this.displayUsers = tempDisplayUsers
-        console.log(this.displayUsers)
       } else if (this.custom.tag == 0) {
+        var tempDisplayUsers = [...this.displayUsers]
+        for (var i = 0; i < this.displayUsers.length; i++) {
+          tempDisplayUsers[i].name = parseInt(Math.random() * 10)
+        }
+        this.displayUsers = tempDisplayUsers
         this.displayUsers = tempUsers
       } else {
         this.displayUsers = tempUsers
@@ -547,8 +557,9 @@ new Vue({
       if (this.custom.tag == -1) {
         this.displayUsers = this.saperateUsers(lastUsers)
         this.isSaperate = 4
-      }
-      else {
+      } else if (this.custom.tag == 0) {
+        this.displayUsers = this.saperateUsers(lastUsers)
+      } else {
         this.displayUsers = lastUsers
       }
       rotatingCards = lastUsers
