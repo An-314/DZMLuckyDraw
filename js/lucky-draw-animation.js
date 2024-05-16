@@ -56,29 +56,23 @@ var animateDuration = 3000
 init()
 animate()
 
+
 // 初始化
 function init() {
 	// 摄像机
 	camera = new THREE.PerspectiveCamera(40, window.innerWidth / window.innerHeight, 1, 10000)
 	camera.position.z = 3000;
-
 	// 场景
 	scene = new THREE.Scene();
 	cssScene = new THREE.Scene();
-
 	// 准备3D模型的材质和几何体
 	var geometry = new THREE.BoxGeometry(130, 220, 5);  // 盒子模型，代表扑克牌
-	// var material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });  // 绿色材质
-
 	// 加载贴图
 	var textureLoader = new THREE.TextureLoader();
 	textureLoader.load('../fig/back.png', function (texture) {
 		var material = new THREE.MeshBasicMaterial({ map: texture });  // 使用贴图创建材质
-
 		var vector = new THREE.Vector3();
-
 		console.log(userPros);
-
 		for (var i = 0, l = userPros.length; i < l; i++) {
 			// 创建Mesh对象
 			var mesh = new THREE.Mesh(geometry, material);
@@ -109,14 +103,12 @@ function init() {
 			targets.grid.push(object);
 		}
 	});
-
 	// WebGLRenderer
 	renderer = new THREE.WebGLRenderer({ alpha: true });
 	renderer.setClearColor(0x000000, 0);
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	renderer.domElement.style.position = 'absolute';
 	document.getElementById('container').appendChild(renderer.domElement);
-
 	// CSS3DRenderer
 	cssRenderer = new THREE.CSS3DRenderer({ alpha: true });
 	renderer.setClearColor(0x000000, 0);
@@ -138,7 +130,6 @@ function createCSS3DCards(users) {
 	console.log('createCSS3DCards', users);
 	// 清除旧的CSS3D对象
 	clearCSSObjects();
-
 	let element, front, back;
 	const cardWidth = 250; // 卡片宽度
 	const cardHeight = 450; // 卡片高度
@@ -162,7 +153,7 @@ function createCSS3DCards(users) {
 		front.className = 'card-front';
 		front.style.width = '100%';
 		front.style.height = '100%';
-		front.style.backgroundColor = 'rgba(0, 127, 127, 0.5)';
+		// front.style.backgroundColor = 'rgba(0, 127, 127, 0.5)';
 		front.style.color = '#fff';
 		front.style.display = 'flex';
 		front.style.alignItems = 'center';
@@ -175,7 +166,7 @@ function createCSS3DCards(users) {
 		back.className = 'card-back';
 		back.style.width = '100%';
 		back.style.height = '100%';
-		back.style.backgroundColor = 'rgba(127, 0, 127, 0.5)';
+		// back.style.backgroundColor = 'rgba(127, 0, 127, 0.5)';
 		back.style.color = '#fff';
 		back.style.display = 'flex';
 		back.style.alignItems = 'center';
@@ -219,6 +210,7 @@ function updateCSS3DCards(users) {
 	}
 }
 
+
 // 清空CSS3D对象
 function clearCSSObjects() {
 	console.log('clearCSSObjects', cssObjects);
@@ -226,6 +218,7 @@ function clearCSSObjects() {
 		cssScene.remove(cssObjects.pop());
 	}
 }
+
 
 // 反转卡片
 function flipCards() {
@@ -235,13 +228,6 @@ function flipCards() {
 	}
 }
 
-// function flipCards() {
-// 	cssObjects.forEach(object => {
-// 		const card = object.element;
-// 		card.style.transition = 'transform 1s';
-// 		card.style.transform = card.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
-// 	});
-// }
 
 // 刷新坐标
 function reloadGridPosition() {
@@ -254,6 +240,7 @@ function reloadGridPosition() {
 		object.position.z = (Math.floor(i / 25)) * 1000 - newPerspective
 	}
 }
+
 
 // 刷新3D定位
 function transform(targets, duration) {
@@ -276,6 +263,7 @@ function transform(targets, duration) {
 		.start()
 }
 
+
 // 窗口尺寸变化
 function onWindowResize() {
 	camera.aspect = window.innerWidth / window.innerHeight
@@ -284,6 +272,7 @@ function onWindowResize() {
 	cssRenderer.setSize(window.innerWidth, window.innerHeight);
 	render()
 }
+
 
 // 动画
 function animate() {
@@ -296,14 +285,15 @@ function animate() {
 	cssRenderer.render(cssScene, camera);
 }
 
+
 // 重新绘制
 function render() {
 	renderer.render(scene, camera)
 }
-
 function cssRender() {
 	cssRenderer.render(cssScene, camera)
 }
+
 
 // 开始动画
 function onlyAnimate() {
@@ -314,6 +304,7 @@ function onlyAnimate() {
 
 }
 
+
 // 停止动画
 function stopAnimate(type) {
 	if (type === 'grid') {
@@ -322,6 +313,7 @@ function stopAnimate(type) {
 	// 设置展示
 	setAnimate(type)
 }
+
 
 // 动画展示模版
 function setAnimate(type) {
@@ -339,6 +331,7 @@ function setAnimate(type) {
 		transform(objects, animateDuration)
 	}
 }
+
 
 // 旋转
 function update() {
@@ -367,53 +360,4 @@ function update() {
 	}
 	// 更新TWEEN
 	TWEEN.update();
-}
-
-
-function generateResult(users) {
-	var textureLoader = new THREE.TextureLoader();
-	var backMaterial, frontMaterials = [];
-
-	// 加载背面贴图
-	textureLoader.load('../fig/back.png', function (backTexture) {
-		backMaterial = new THREE.MeshBasicMaterial({ map: backTexture });
-		// 加载正面贴图
-		textureLoader.load('../fig/front.png', function (frontTexture) {
-			users.forEach((user, index) => {
-				var canvas = document.createElement('canvas');
-				canvas.width = 512;
-				canvas.height = 512;
-				var context = canvas.getContext('2d');
-				// 绘制正面贴图
-				context.drawImage(frontTexture.image, 0, 0);
-				// 设置用户数据
-				context.font = '30px Arial';
-				context.fillStyle = 'white';
-				context.fillText(user.name, 20, 470); // 显示用户名
-				context.fillText(user.department, 20, 510); // 显示用户部门
-				var userTexture = new THREE.CanvasTexture(canvas);
-				var userMaterial = new THREE.MeshBasicMaterial({ map: userTexture });
-				frontMaterials.push(userMaterial);
-			});
-
-			createCards();
-		});
-	});
-	function createCards() {
-		var geometry = new THREE.PlaneGeometry(300, 500); // 卡片大小
-		for (var i = 0; i < users.length; i++) {
-			// 创建正反两面的材质
-			var materials = [
-				backMaterial,
-				frontMaterials[i]
-			];
-			// 使用正反两面的材质创建Mesh
-			var mesh = new THREE.Mesh(geometry, materials);
-			// 将卡片放置在屏幕中央
-			mesh.position.set(0, 0, 0);
-			// 将卡片添加到场景中
-			scene.add(mesh);
-			objects.push(mesh);
-		}
-	}
 }
