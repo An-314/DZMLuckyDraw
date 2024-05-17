@@ -321,6 +321,7 @@ new Vue({
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
           this.users = this.lastUsers
+          this.displayUsers = this.lastUsers
           this.saveWinningUsers()
           stopAnimate('grid')
         } else {
@@ -608,6 +609,7 @@ new Vue({
       })
       // 保存
       localStorage.setItem('winning-users', JSON.stringify(this.winningUsers))
+      console.log('winningUsers', this.winningUsers)
     },
     // 显示中奖名单
     showWinningUsers() {
