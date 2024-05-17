@@ -321,7 +321,7 @@ new Vue({
           clearInterval(this.luckyDrawTime)
           this.luckyDrawTime = undefined
           this.users = this.lastUsers
-          this.displayUsers = this.lastUsers
+          this.updateFinalUsers()
           this.saveWinningUsers()
           stopAnimate('grid')
         } else {
@@ -461,6 +461,12 @@ new Vue({
         tempDisplayUsers[i].name = resultUsers[i].name
       }
       this.displayUsers = tempDisplayUsers
+    },
+    // 更新中奖名单
+    updateFinalUsers() {
+      if (this.custom?.tag == -1 || this.custom?.tag == 0) { } else {
+        this.displayUsers = this.lastUsers
+      }
     },
     // 初次获取中奖名单
     GetUsers() {
