@@ -51,9 +51,13 @@ body {
     transition: none !important;
     background-color: #000;
 }
-.ant-btn:disabled {
+.ant-btn:disabled,
+.ant-btn:disabled:hover,
+.ant-btn:disabled:focus,
+.ant-btn:disabled:active {
     transition: none !important;
     background-color: #000;
+    cursor: not-allowed;
 }
 .ant-input,
 .ant-btn,
@@ -153,6 +157,10 @@ body {
 }
 .card-back {
     transform: rotateY(180deg);
+}
+.card-back div {
+    text-align: center;
+    font-size: var(--font-size, 16px) !important;
 }
 
 /* 抽奖浮层 - 开始抽奖从中间撑开 */

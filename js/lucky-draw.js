@@ -439,6 +439,7 @@ new Vue({
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
       } else if (this.isSaperate == 2) {
         this.isSaperate = 0
+        this.stopLuckyDraw()
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
       } else {
         this.isSaperate = 4

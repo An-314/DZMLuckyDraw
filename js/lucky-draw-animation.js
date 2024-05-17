@@ -180,6 +180,10 @@ function createCSS3DCards(users) {
 		back.style.position = 'absolute';
 		back.style.backfaceVisibility = 'hidden';
 		back.style.transform = 'rotateY(180deg)';
+		// 获取用户名和部门信息
+		let userName = users[i].name;
+		let fontSize = userName.length > 1 ? 60 : 100;
+		back.style.setProperty('--font-size', `${fontSize}px`);
 		back.innerHTML = `<div>${users[i].name}</div><div>${users[i].department}</div>`; // 正面内容
 		element.appendChild(back);
 		// 计算卡片的位置

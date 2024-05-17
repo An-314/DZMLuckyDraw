@@ -1,6 +1,6 @@
 {
     "name": "wei-gacha",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "⌈未来式⌋抽卡器",
     "main": "main.js",
     "bin": "main.js",
