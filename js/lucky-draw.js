@@ -225,14 +225,25 @@ new Vue({
     handleModeTypeChange(value, e) {
       // 记录奖项
       this.custom = e.data.attrs.item
+      this.setDefaultNumber()
+    },
+    // 设置默认数值
+    setDefaultNumber() {
       if (this.custom?.tag > 0) {
         this.numberPeople = this.custom?.tag
         this.placeholderText = `${this.custom?.tag}`
+      } else if (this.custom?.tag == 0) {
+        this.numberPeople = 1
+        this.placeholderText = '1'
+      } else if (this.custom?.tag == -1) {
+        this.numberPeople = 5
+        this.placeholderText = `5`
       } else {
         this.numberPeople = undefined
         this.placeholderText = '本轮抽奖人数'
       }
     },
+    // 设置抽奖模式
     luckyDraw() {
       // 是否在抽奖
       if (this.isLuckyDraw) {
@@ -320,13 +331,7 @@ new Vue({
           this.number += 1
           stopAnimate('sphere')
         }
-        if (this.custom?.tag > 0) {
-          this.numberPeople = this.custom?.tag
-          this.placeholderText = `${this.custom?.tag}`
-        } else {
-          this.numberPeople = undefined
-          this.placeholderText = '本轮抽奖人数'
-        }
+        this.setDefaultNumber()
       }
     },
     // 添加鼠标滚轮事件

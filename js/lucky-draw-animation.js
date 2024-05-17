@@ -353,7 +353,7 @@ function update() {
 		var targetZ = 900 * Math.cos(angle);
 		// 创建TWEEN动画
 		new TWEEN.Tween(object.position)
-			.to({ x: targetX, z: targetZ }, 50)
+			.to({ x: targetX, z: targetZ }, 10)
 			.easing(TWEEN.Easing.Quadratic.Out)
 			.start();
 	}
