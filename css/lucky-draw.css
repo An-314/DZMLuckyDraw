@@ -2,6 +2,15 @@ body {
     /* position: relative; */
     background-color: #000000;
 }
+.vertical-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* 或者 center，取决于您想要的对齐方式 */
+}
+.lucky-draw-button {
+    width: 120px !important;
+}
+
 .lucky-draw-view {
     position: absolute;
     top: 0;

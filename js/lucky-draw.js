@@ -77,44 +77,46 @@ new Vue({
         </div>
       </div>
       <!-- 设置奖项，人数，并开始抽奖 -->
-      <div class="lucky-draw-tool-left">
-        <!-- 设置奖项 -->
-        <a-select
-          v-if="modeType == 1"
-          class="lucky-draw-custom"
-          placeholder="请选择奖项"
-          :disabled="isLuckyDraw"
-          @change="handleModeTypeChange"
+      <div class="lucky-draw-tool-left vertical-layout">
+      <!-- 设置奖项 -->
+      <a-select
+        v-if="modeType == 1"
+        class="lucky-draw-custom lucky-draw-button"
+        placeholder="请选择奖项"
+        :disabled="isLuckyDraw"
+        @change="handleModeTypeChange"
+      >
+        <a-select-option
+          v-for="(item, index) in customs"
+          :key="index"
+          :value="index"
+          :item="item"
         >
-          <a-select-option
-            v-for="(item, index) in customs"
-            :key="index"
-            :value="index"
-            :item="item"
-          >
-            {{ item.name }}
-          </a-select-option>
-        </a-select>
-        <!-- 设置抽奖人数 -->
-        <a-input
-          :class="modeType == 1 ? 'lucky-draw-number-custom' : 'lucky-draw-number'"
-          :disabled="isLuckyDraw"
-          v-model="numberPeople"
-          :placeholder="placeholderText""
-        />
-        <!-- 抽奖按钮 -->
-        <a-button 
-          @click="luckyDraw" 
-          :disabled="isSaperate !== 0">
-          {{ isLuckyDraw ? (luckyDrawTime ? '停止抽奖' : '结束本轮') : '开始抽奖' }}
+          {{ item.name }}
+        </a-select-option>
+      </a-select>
+      <!-- 设置抽奖人数 -->
+      <a-input
+        :class="modeType == 1 ? 'lucky-draw-number-custom lucky-draw-button' : 'lucky-draw-number lucky-draw-button'"
+        :disabled="isLuckyDraw"
+        v-model="numberPeople"
+        :placeholder="placeholderText"
+      />
+      <!-- 抽奖按钮 -->
+      <a-button 
+        @click="luckyDraw" 
+        :disabled="isSaperate !== 0"
+        class="lucky-draw-button"
+      >
+        {{ isLuckyDraw ? (luckyDrawTime ? '停止抽奖' : '结束本轮') : '开始抽奖' }}
+      </a-button>
+      <!-- 分开展示 -->
+      <div>
+        <a-button v-if="isSaperate !== 0" @click="saperatingStop" class="lucky-draw-button">
+          继续揭示
         </a-button>
-        <!-- 分开展示 -->
-        <div>
-          <a-button v-if="isSaperate !== 0" @click="saperatingStop">
-            继续揭示
-          </a-button>
-        </div>
-      </div>
+       </div>
+      </div>    
       <!-- 右边工具栏 -->
       <div class="lucky-draw-tool-right">
         <!-- 中奖名单 -->
