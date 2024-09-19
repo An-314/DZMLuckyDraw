@@ -1,7 +1,7 @@
 {
     "name": "wei-gacha",
-    "version": "1.1.0",
-    "description": "⌈未来式⌋抽卡器",
+    "version": "1.2.0",
+    "description": "⌈缘来似你⌋抽卡器",
     "main": "main.js",
     "bin": "main.js",
     "scripts": {
