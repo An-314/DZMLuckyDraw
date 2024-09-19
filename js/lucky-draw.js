@@ -433,6 +433,10 @@ new Vue({
           result.push(separatedUsers[j * 3 + i]);
         }
       }
+      if (this.custom?.tag == -1) {
+        // 把result倒叙
+        return result.reverse()
+      }
       return result;
     },
     // 继续揭示
