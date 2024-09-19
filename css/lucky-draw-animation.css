@@ -11,7 +11,7 @@ body {
 }
 /* 单张名片 - 卡片 */
 .element {
-    width: 170px;
+    width: 210px;
     height: 210px;
     /* 名片阴影 */
     box-shadow: 0px 0px 12px rgba(247, 232, 173, 0.5);
@@ -64,7 +64,7 @@ body {
 } */
 
 .card {
-    width: 250px;
+    width: 400px;
     height: 450px;
     position: relative;
     transform-style: preserve-3d;
@@ -80,7 +80,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
-    background-image: url("../fig/back.png"); /* 导入背景图片 */
+    background-image: url("../fig/back.jpg"); /* 导入背景图片 */
     background-size: cover; /* 背景图片自适应 */
     background-position: center; /* 背景图片居中 */
     color: rgba(247, 232, 173, 1);
@@ -94,7 +94,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
-    background-image: url("../fig/front.png"); /* 导入背景图片 */
+    background-image: url("../fig/front.jpg"); /* 导入背景图片 */
     background-size: cover; /* 背景图片自适应 */
     background-position: center; /* 背景图片居中 */
 

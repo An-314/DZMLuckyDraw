@@ -238,8 +238,8 @@ new Vue({
         this.numberPeople = 1
         this.placeholderText = '1'
       } else if (this.custom?.tag == -1) {
-        this.numberPeople = 5
-        this.placeholderText = `5`
+        this.numberPeople = 1
+        this.placeholderText = `1`
       } else {
         this.numberPeople = undefined
         this.placeholderText = '本轮抽奖人数'
@@ -274,8 +274,8 @@ new Vue({
           this.$message.error(`抽奖名单共 ${users.length} 人，填写抽奖人数必须小于或等于 ${users.length} 人`)
           return
         }
-        if (this.custom?.tag == -1 && this.numberPeople % 5 != 0) {
-          this.$message.error('抽奖人数必须是5的倍数')
+        if (this.custom?.tag == -1 && this.numberPeople % 1 != 0) {
+          this.$message.error('特等奖抽奖人数必须是1')
           return
         }
         if (this.custom?.tag == 0 && this.numberPeople != 1) {
@@ -407,19 +407,18 @@ new Vue({
         this.displayUsers = tempUsers
       }
     },
-    // 把users中的数据每一个变成4位数，不够的前面补0
+    // 把users中的数据每一个变成3位数，不够的前面补0
     saperateUsers(users) {
-      // 首先，将每个用户的名字分成四部分
+      // 首先，将每个用户的名字分成3部分
       console.log("saperateUsers", users)
       const separatedUsers = users.flatMap(user => {
-        const paddedName = user.name.padStart(4, '0'); // 在前面补0，确保至少有4位
+        const paddedName = user.name.padStart(3, '0'); // 在前面补0，确保至少有4位
         const segments = [
-          paddedName.slice(0, paddedName.length - 3), // 提取从开头到倒数第四位的部分
-          paddedName.slice(paddedName.length - 3, paddedName.length - 2), // 提取倒数第三位
+          paddedName.slice(0, paddedName.length - 2), // 提取从开头到倒数第三位的部分
           paddedName.slice(paddedName.length - 2, paddedName.length - 1), // 提取倒数第二位
           paddedName.slice(paddedName.length - 1) // 提取最后一位
         ];
-        // 创建四个新用户对象
+        // 创建三个新用户对象
         return segments.map(segment => ({
           id: user.id,
           name: segment,
@@ -429,28 +428,27 @@ new Vue({
       // 按交错的顺序重新排列
       const result = [];
       const userCount = users.length;
-      for (let i = 3; i >= 0; i--) {
+      for (let i = 2; i >= 0; i--) {
         for (let j = 0; j < userCount; j++) {
-          result.push(separatedUsers[j * 4 + i]);
+          result.push(separatedUsers[j * 3 + i]);
         }
       }
       return result;
     },
     // 继续揭示
     saperatingStop() {
-      if (this.isSaperate == 4) {
-        this.isSaperate = 3
-        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
-
-      } else if (this.isSaperate == 3) {
+      if (this.isSaperate == 3) {
         this.isSaperate = 2
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
       } else if (this.isSaperate == 2) {
+        this.isSaperate = 1
+        cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
+      } else if (this.isSaperate == 1) {
         this.isSaperate = 0
         this.stopLuckyDraw()
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
       } else {
-        this.isSaperate = 4
+        this.isSaperate = 3
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
       }
       this.revealSaperatedUsers()
@@ -585,7 +583,7 @@ new Vue({
       this.lastUsers = lastUsers
       if (this.custom?.tag == -1) {
         this.displayUsers = this.saperateUsers(lastUsers)
-        this.isSaperate = 4
+        this.isSaperate = 3
       } else if (this.custom?.tag == 0) {
         this.displayUsers = this.saperateUsers(lastUsers)
       } else {
