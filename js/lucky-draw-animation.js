@@ -194,7 +194,7 @@ function createCSS3DCards(users) {
 		const posY = row * rowSpacing + offsetY;
 		// 创建CSS3D对象
 		let objectCSS = new THREE.CSS3DObject(element);
-		objectCSS.position.x = posX;
+		objectCSS.position.x = -posX;
 		objectCSS.position.y = posY;
 		objectCSS.position.z = 0;
 		cssScene.add(objectCSS);
