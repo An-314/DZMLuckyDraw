@@ -75,17 +75,17 @@ body {
     background-color: #000;
     border-radius: 0px;
     /* 按钮边框 */
-    border-color: rgba(96, 99, 187, 0.75);
+    border-color: rgb(35, 61, 72);
     /* 按钮字体 */
     color: rgba(255, 255, 255, 0.75);
     /* 按钮字体阴影 */
-    text-shadow: 0 0 10px rgba(96, 99, 187, 0.95);
+    text-shadow: 0 0 10px rgba(35, 61, 72, 0.95);
     z-index: 10;
 }
 /* 抽奖浮层 - 奖项 */
 .ant-select-dropdown {
     /* 奖项背景 */
-    background-color: rgba(96, 99, 187, 0.5);
+    background-color: rgba(35, 61, 72, 0.8);
 }
 .ant-select-dropdown-menu-item {
     /* 奖项字体 */
@@ -97,7 +97,7 @@ body {
 .ant-select-dropdown-menu-item-active,
 .ant-select-dropdown-menu-item-selected {
     /* 奖项选中背景 */
-    background-color: rgba(96, 99, 187, 0.7) !important;
+    background-color: rgba(134, 6, 6, 0.75) !important;
 }
 /* 抽奖浮层 - 抽奖按钮边框圆角，以下几个都是 */
 .ant-select-selection {
@@ -137,11 +137,11 @@ body {
 /* 抽奖浮层 - 抽奖中间撑开承载用户名片的一栏 */
 .lucky-draw-users {
     /* 抽奖栏背景 */
-    background-color: rgba(96, 99, 187, 0.4);
+    background-color: rgba(181, 200, 207, 0.8);
     /* 抽奖栏阴影 */
-    box-shadow: 0px 0px 12px rgba(96, 99, 187, 0.75);
+    box-shadow: 0px 0px 12px rgba(181, 200, 207, 0.75);
     /* 抽奖栏边框 */
-    border: 3px solid rgba(247, 232, 173, 1);
+    border: 3px solid rgb(35, 61, 72);
     width: calc(100% - 20px); /* 让宽度小于100%以留出外侧距离 */
     opacity: 0.2;
     height: 0px;
@@ -223,7 +223,7 @@ body {
     /* 名片阴影 */
     box-shadow: 0px 0px 12px rgba(67, 63, 47, 0.75);
     /* 名片边框 */
-    border: 1px solid rgba(247, 232, 173, 0.75);
+    border: 1px solid rgba(134, 6, 6, 0.75);
     position: relative;
     display: flex;
     align-items: center;
@@ -244,9 +244,9 @@ body {
     word-wrap: break-word;
     /* 用户名颜色 */
     /* color: rgba(255, 255, 255, 0.75); */
-    color: rgba(247, 232, 173, 1);
+    color: rgba(134, 6, 6, 1);
     /* 用户名阴影 */
-    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
+    text-shadow: 0 0 10px rgba(134, 6, 6, 0.95);
 }
 /* 抽奖浮层 - 单张名片 - 职位 */
 .lucky-draw-user-department {
@@ -254,9 +254,9 @@ body {
     bottom: 14px;
     /* 职位颜色 */
     /* color: rgba(255, 255, 255, 0.75); */
-    color: rgba(247, 232, 173, 1);
+    color: rgba(134, 6, 6, 1);
     /* 职位阴影 */
-    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
+    text-shadow: 0 0 10px rgba(134, 6, 6, 0.95);
 }
 /* 抽奖浮层 - 老板大气，已经人人中奖了！ */
 .lucky-draw-empty {
@@ -264,7 +264,7 @@ body {
     font-size: 40px;
     font-weight: 700;
     /* 字体颜色 */
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(134, 6, 6, 0.75);
     /* 字体阴影 */
     text-shadow: 0 0 10px rgba(0, 255, 255, 0.95);
 }

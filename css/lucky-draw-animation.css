@@ -11,12 +11,12 @@ body {
 }
 /* 单张名片 - 卡片 */
 .element {
-    width: 210px;
-    height: 210px;
+    width: 446px;
+    height: 627px;
     /* 名片阴影 */
-    box-shadow: 0px 0px 12px rgba(247, 232, 173, 0.5);
+    box-shadow: 0px 0px 12px rgba(134, 6, 6, 0.5);
     /* 名片边框 */
-    border: 1px solid rgba(247, 232, 173, 0.25);
+    border: 1px solid rgba(134, 6, 6, 0.25);
     /* 名片背景（内部有根据位置计算，每张名片背景颜色有微调） */
     /* /js/lucky-draw-animation.js 文件中找到 '名片背景颜色' 位置，有  */
     /* background-color: red !important; */
@@ -41,9 +41,9 @@ body {
     text-align: center;
     word-wrap: break-word;
     /* 用户名颜色 */
-    color: rgba(255, 255, 255, 0.75);
+    color: rgba(134, 6, 6, 0.75);
     /* 用户名阴影 */
-    text-shadow: 0 0 10px rgba(247, 232, 173, 0.95);
+    text-shadow: 0 0 10px rgba(134, 6, 6, 0.95);
 }
 /* 单张名片 - 职位 */
 .element .details {
@@ -53,7 +53,7 @@ body {
     right: 0px;
     font-size: 20px;
     /* 职位颜色 */
-    color: rgba(247, 232, 173, 0.75);
+    color: rgba(134, 6, 6, 0.75);
 }
 /* .element .number {
 	position: absolute;
@@ -64,8 +64,8 @@ body {
 } */
 
 .card {
-    width: 400px;
-    height: 450px;
+    width: 446px;
+    height: 627px;
     position: relative;
     transform-style: preserve-3d;
     transition: transform 0.5s;
@@ -80,10 +80,10 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
-    background-image: url("../fig/back.jpg"); /* 导入背景图片 */
+    background-image: url("../fig/back.png"); /* 导入背景图片 */
     background-size: cover; /* 背景图片自适应 */
     background-position: center; /* 背景图片居中 */
-    color: rgba(247, 232, 173, 1);
+    color: rgba(134, 6, 6, 1);
 }
 .card-back {
     width: 100%;
@@ -94,7 +94,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.4);
-    background-image: url("../fig/front.jpg"); /* 导入背景图片 */
+    background-image: url("../fig/front.png"); /* 导入背景图片 */
     background-size: cover; /* 背景图片自适应 */
     background-position: center; /* 背景图片居中 */
 
@@ -105,7 +105,7 @@ body {
     word-wrap: break-word;
 }
 .card-back div {
-    color: rgba(247, 232, 173, 1);
+    color: rgba(134, 6, 6, 1);
 }
 .card-back {
     transform: rotateY(180deg);

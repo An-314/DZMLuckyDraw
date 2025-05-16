@@ -112,7 +112,7 @@ new Vue({
       </a-button>
       <!-- 分开展示 -->
       <div>
-        <a-button v-if="isSaperate !== 0" @click="saperatingStop" class="lucky-draw-button">
+        <a-button v-if="custom?.tag == -20 || isSaperate !== 0" @click="saperatingStop" class="lucky-draw-button">
           继续揭示
         </a-button>
        </div>
@@ -174,7 +174,8 @@ new Vue({
       // 卡片翻转状态
       isResult: false,
       // 输入框提示
-      placeholderText: '本轮抽奖人数'
+      placeholderText: '本轮抽奖人数',
+      revealCount: 0,
     }
   },
   mounted() {
@@ -240,6 +241,9 @@ new Vue({
       } else if (this.custom?.tag == -1) {
         this.numberPeople = 1
         this.placeholderText = `1`
+      } else if (this.custom?.tag == -20) {
+        this.numberPeople = 20
+        this.placeholderText = '20'
       } else {
         this.numberPeople = undefined
         this.placeholderText = '本轮抽奖人数'
@@ -378,35 +382,64 @@ new Vue({
     },
     // 更新抽奖名单
     updateNumberUsers() {
-      const tempUsers = []
-      if ((this.custom?.tag !== -1 && this.custom?.tag !== 0) || this.custom?.tag == undefined) {
-        var number = 0;
-        const total = users.length
-        while (number < this.numberPeople) {
-          const index = parseInt(Math.random() * total)
-          const user = users[index]
-          if (user) { tempUsers.push(user) }
-          number++;
+      // —— 1. 拦截 -20 模式 —— 
+      if (this.custom?.tag == -20) {
+        const total = users.length;
+        // （a）如果已经翻完所有牌，就停掉定时器，并把 displayUsers 全部设为真实 this.lastUsers
+        if (this.revealCount >= this.numberPeople) {
+          clearInterval(this.luckyDrawTime);
+          this.luckyDrawTime = undefined;
+          // 直接显示真正的中奖名单
+          this.displayUsers = this.lastUsers.slice(0, this.numberPeople);
+
+          return;
         }
-        this.users = tempUsers
+        // （b）还没全翻时：已翻开的牌固定是真实用户，未翻开的牌继续随机滚动
+        const newDisplay = [];
+        for (let i = 0; i < this.numberPeople; i++) {
+          if (i >= this.numberPeople - this.revealCount) {
+            // 已翻开的：直接锁定真实值
+            newDisplay[i] = this.lastUsers[i];
+          } else {
+            // 未翻开的：继续从 users 随机抽一个，给滚动效果
+            newDisplay[i] = users[Math.floor(Math.random() * total)];
+          }
+        }
+        this.displayUsers = newDisplay;
+        return;
+      }
+      // —— 2. 其它模式走原来的逻辑 —— 
+      const tempUsers = [];
+      if ((this.custom?.tag !== -1 && this.custom?.tag !== 0) || this.custom?.tag == undefined) {
+        let cnt = 0;
+        const total = users.length;
+        while (cnt < this.numberPeople) {
+          const idx = Math.floor(Math.random() * total);
+          const u = users[idx];
+          if (u) {
+            tempUsers.push(u);
+            cnt++;
+          }
+        }
+        this.users = tempUsers;
       }
       if (this.custom?.tag == -1) {
-        // 每位数字都从0-9中随机
-        var tempDisplayUsers = [...this.displayUsers]
-        for (var i = 0; i < this.isSaperate * this.numberPeople; i++) {
-          tempDisplayUsers[i].name = parseInt(Math.random() * 10)
+        const tempDisplay = [...this.displayUsers];
+        for (let i = 0; i < this.isSaperate * this.numberPeople; i++) {
+          tempDisplay[i].name = Math.floor(Math.random() * 10);
         }
-        this.displayUsers = tempDisplayUsers
+        this.displayUsers = tempDisplay;
       } else if (this.custom?.tag == 0) {
-        var tempDisplayUsers = [...this.displayUsers]
-        for (var i = 0; i < this.displayUsers.length; i++) {
-          tempDisplayUsers[i].name = parseInt(Math.random() * 10)
+        const tempDisplay = [...this.displayUsers];
+        for (let i = 0; i < tempDisplay.length; i++) {
+          tempDisplay[i].name = Math.floor(Math.random() * 10);
         }
-        this.displayUsers = tempDisplayUsers
+        this.displayUsers = tempDisplay;
       } else {
-        this.displayUsers = tempUsers
+        this.displayUsers = tempUsers;
       }
     },
+
     // 把users中的数据每一个变成3位数，不够的前面补0
     saperateUsers(users) {
       // 首先，将每个用户的名字分成3部分
@@ -441,6 +474,28 @@ new Vue({
     },
     // 继续揭示
     saperatingStop() {
+      // —— custom.tag == -20：逐张揭示 —— 
+      if (this.custom?.tag == -20) {
+        // 初始化 revealCount（首次点击）
+        if (this.revealCount == null) {
+          this.revealCount = 0;
+        }
+        // 已揭示 < 总张数，则翻下一张
+        if (this.revealCount < this.numberPeople) {
+          // 计算“还在旋转”的卡片索引：从 revealCount+1 到 numberPeople-1
+          cardRotatingIndex = Array.from(
+            { length: this.numberPeople - this.revealCount - 1 },
+            (_, k) => k + this.revealCount + 1
+          );
+          this.revealCount++;
+        }
+        // 如果已经揭完所有张，结束本轮
+        if (this.revealCount >= this.numberPeople) {
+          this.revealCount = 0;
+          this.stopLuckyDraw();
+        }
+        return;
+      }
       if (this.isSaperate == 3) {
         this.isSaperate = 2
         cardRotatingIndex = Array.from({ length: this.isSaperate * this.numberPeople }, (v, k) => k)
@@ -590,6 +645,9 @@ new Vue({
         this.isSaperate = 3
       } else if (this.custom?.tag == 0) {
         this.displayUsers = this.saperateUsers(lastUsers)
+      } else if (this.custom?.tag == -20) {
+        this.displayUsers = lastUsers
+        this.revealCount = 0;
       } else {
         this.displayUsers = lastUsers
       }

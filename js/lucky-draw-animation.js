@@ -72,7 +72,7 @@ function init() {
 	var geometry = new THREE.BoxGeometry(130, 220, 5);  // 盒子模型，代表扑克牌
 	// 加载贴图
 	var textureLoader = new THREE.TextureLoader();
-	textureLoader.load('./fig/back.jpg', function (texture) {
+	textureLoader.load('./fig/back.png', function (texture) {
 		var material = new THREE.MeshBasicMaterial({ map: texture });  // 使用贴图创建材质
 		var vector = new THREE.Vector3();
 		console.log(userPros);
@@ -137,8 +137,8 @@ function createCSS3DCards(users) {
 	// 清除旧的CSS3D对象
 	clearCSSObjects();
 	let element, front, back;
-	const cardWidth = 350; // 卡片宽度
-	const cardHeight = 450; // 卡片高度
+	const cardWidth = 288; // 卡片宽度
+	const cardHeight = 400; // 卡片高度
 	const rowSpacing = 500; // 行间距
 	const colSpacing = 400; // 列间距
 	const cardsPerRow = 5; // 每行固定5个卡片
